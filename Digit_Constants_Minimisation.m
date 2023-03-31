@@ -4,19 +4,22 @@
 %the "A Musculoskeletal Model of the Hand and Wrist
 %Capable of Simulating Functional Tasks". The idea is to minimze the
 %difference between the observed angles and those determined from the
-%itterative solution of the extended IBK model/Lagrangian. User defined inputs are the
-%selection of minimising the IBK approximation or the complete Lagrangian
-%function. If the experiment is performed in the direction of gravity this
-%can also be specified. The parameters of the Maximum Voluntary Contraction
+%itterative solution of the IBK model. If the experiment is performed in the direction of gravity this
+%can be specified. The parameters of the Maximum Voluntary Contraction
 %(MVC) for the EDC, FDP, FDS,EPL and FPL muscles can  also be given if the
 %normalisation of the signal is done under the MVC criterion. Otherwise the
 %criterion of the maximum peak of the signal is used to normalise the EMG
 %recordings.
+
 global mn1 mn2 mn3;
 close all;
 clc;
-%Select if you want to minimise the IBK or the Lagrangian. Set either to 1
-%if you want to minimise the respective equations
+
+%Set the sampling frequency of the MoCap
+fs=125;
+fn=fs/2;
+
+%Do not change the following two variables
 IBK=1;
 Lag=[];
 
@@ -33,11 +36,10 @@ aFPLMax=[];
 %gravitational acceleration m/s^2
 g=9.81;
 
-%Set the sampling frequency of the MoCap
-fs=125;
-fn=fs/2;
 
-%Human body density in Kg*/m^3
+%Human body density in Kg*/m^3 according to Dempster W.T., “Space requirements of the seated operator: geometrical, kinematic, 
+%and mechanical aspects of the body, with special reference to the limbs,” Ohio, 1955. [Online]. 
+%Available: https://deepblue.lib.umich.edu/handle/2027.42/4540
 rho=1.16*10^3;
 
 

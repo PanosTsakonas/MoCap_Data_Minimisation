@@ -80,7 +80,7 @@ syms t x
 Par=input("Give the participant number: ");
 in=input("Give the digit you are working with: ");
 
-%Uncomment the following when I am working from my Laptop
+%Set directory path for the Moment_of_inertia.xlsx file
 I=importfile("Set file directory for participant segment length and moment of inertia data","");
 
 %Import the parameters from the excel files.

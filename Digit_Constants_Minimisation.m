@@ -79,7 +79,7 @@ Par=input("Give the participant number: ");
 in=input("Give the digit you are working with: ");
 
 %Uncomment the following when I am working from my Laptop
-I=importfile("C:\Users\panos\OneDrive - University of Warwick\PhD\Hand Trials\Digit Weights 2\P_"+Par+".xlsx","");
+I=importfile("Set file directory for participant segment length and moment of inertia data","");
 
 %Import the parameters from the excel files.
 I1=I.data(27+in,4);
@@ -142,7 +142,7 @@ r1=[0.0013 0.0482 1 1 1];
 r2=[5.26E-04 0.0169 1 1 1];
 r3=[8.23E-05 0.002814 1 1];
 
-TH=importfile("C:\Users\panos\OneDrive - University of Warwick\PhD\Hand Trials\Results\Cylindrical Grasp\P"+Par+"\Equilibrium angles\equilibrium_no_gravity.csv","");
+TH=importfile("Set file directory for equilibrium angles with no gravity","");
 %Set the equilibrium angles in degrees determined from a static capture
 if in==2
  theq=[mean(TH.data(5:end,59),'omitnan')  mean(TH.data(5:end,35),'omitnan') mean(TH.data(5:end,14),'omitnan')].*pi/180;
@@ -248,60 +248,4 @@ ylabel("Angle (rad)");
 title("Angular data and fit with optimised values");
 
 end
-end
-
-
-%Lagrangian Optimisation
-if isempty(Lag)==0
-    
-    %Set the initial values for the minimised parameters
-    RR=[0.0482 0.0169 0.002814 0.0013 5.26E-04 8.23E-05 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5];
-    %Set the equilibrium angles
- theq=[40.93 43.77 26.75].*pi/180;
- 
-[MinL,sum1]=fmincon(@(r) Lagrange_obj(R1,R2,R3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,EDC_PIP,FDP_PIP,FDS_PIP,EDC_DIP,FDP_DIP,r,tim,init,th1f,th2f,th3f,theq,grav),RR,[],[],[],[],[RR(1) RR(2) RR(3) RR(4) RR(5) RR(6) 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1],[10 10 5 2 2 2 1 1 1 1 1 1 1 1],[],options);
-
-[~,Y]=Lagr_Sys(R1,R2,R3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,EDC_PIP,FDP_PIP,FDS_PIP,EDC_DIP,FDP_DIP,MinL,tim,init,theq,grav);
-
-figure
-plot(tim,Y(:,1),tim,th1f);
-legend("Minimisation","Gait Lab MCP data");
-xlabel("Time (s)");
-ylabel("Angle (rad)");
-title("Angular data and fit with optimised values");
-
-figure
-plot(tim,Y(:,3),tim,th2f);
-legend("Minimisation","Gait Lab PIP data");
-xlabel("Time (s)");
-ylabel("Angle (rad)");
-title("Angular data and fit with optimised values");
-
-figure
-plot(tim,Y(:,5),tim,th3f);
-legend("Minimisation","Gait Lab DIP data");
-xlabel("Time (s)");
-ylabel("Angle (rad)");
-title("Angular data and fit with optimised values");
-end
-
-%Display the damping ratio for the free response of the system with the
-%values determined from the minimisation.
-
-if isempty(IBK)==0
-dmcp=Min1(1)/(2*I1*sqrt(Min1(2)/I1));
-dpip=Min2(1)/(2*I2*sqrt(Min2(2)/I2));
-ddip=Min3(1)/(2*I3*sqrt(Min3(2)/I3));
-
-disp("Damping ratio of proximal segment: "+dmcp);
-disp("Damping ratio of middle segment: "+dpip);
-disp("Damping ratio of distal segment: "+ddip);
-elseif isempty(Lag)==0
-dmcp=MinL(1)/(2*I1*sqrt(MinL(4)/I1));
-dpip=MinL(2)/(2*I2*sqrt(MinL(5)/I2));
-ddip=MinL(3)/(2*I3*sqrt(MinL(6)/I3));
-
-disp("Damping ratio of proximal segment: "+dmcp);
-disp("Damping ratio of middle segment: "+dpip);
-disp("Damping ratio of distal segment: "+ddip);
 end

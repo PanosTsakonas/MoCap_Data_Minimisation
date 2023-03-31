@@ -147,13 +147,13 @@ r3=[8.23E-05 0.002814 1 1];
 TH=importfile("Set file directory for equilibrium angles with no gravity","");
 %Set the equilibrium angles in degrees determined from a static capture
 if in==2
- theq=[mean(TH.data(5:end,59),'omitnan')  mean(TH.data(5:end,35),'omitnan') mean(TH.data(5:end,14),'omitnan')].*pi/180;
+ theq=[].*pi/180;
 elseif in==3
- theq=[mean(TH.data(5:end,62),'omitnan')  mean(TH.data(5:end,41),'omitnan') mean(TH.data(5:end,17),'omitnan')].*pi/180;
+ theq=[].*pi/180;
  elseif in==4
- theq=[mean(TH.data(5:end,65),'omitnan')  mean(TH.data(5:end,47),'omitnan') mean(TH.data(5:end,20),'omitnan')].*pi/180;
+ theq=[].*pi/180;
 else
- theq=[mean(TH.data(5:end,68),'omitnan')  mean(TH.data(5:end,53),'omitnan') mean(TH.data(5:end,23),'omitnan')].*pi/180;
+ theq=[].*pi/180;
 end
 
 %Proximal segment IBK optimisation

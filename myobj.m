@@ -40,9 +40,6 @@ end
 
 %Least squares
 obj=sum(sum((th_exp-th_G).^2));
-
-%Root mean square error
-%obj=sqrt(mean((th_exp-th_G).^2));
 end
 
 

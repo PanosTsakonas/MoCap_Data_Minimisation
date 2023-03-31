@@ -261,9 +261,7 @@ yedc1=filtfilt(bemg,aemg,yedc1);
 yfdp1=filtfilt(bemg,aemg,yfdp1);
 yfds1=filtfilt(bemg,aemg,yfds1);
 %}
-%Set the Tact and Tdeact according to the 
-Tact=15*10^-3;
-Tdeact=50*10^-3;
+
 
 if (in==2)
 ll=1;
@@ -380,6 +378,15 @@ pfds=spline(tEMG,yfds);
 ppedc=mkpp(pedc.breaks,pedc.coefs);
 ppfdp=mkpp(pfdp.breaks,pfdp.coefs);
 ppfds=mkpp(pfds.breaks,pfds.coefs);
+
+%The following are taken from "Real-time simulation of hand motion for prosthesis control". The initial
+%muscle activation since there is no motion before the experiment is
+%assumed to be equal to zero. Tact and Tdeact are taken from the same
+%paper.
+
+Tact=15*10^-3;
+Tdeact=50*10^-3;
+
 
 [~,a_edc_ode]=ode45(@(t,a) activation(t,a,ppedc),tEMG,0);
 [~,a_fdp_ode]=ode45(@(t,a) activation(t,a,ppfdp),tEMG,0);

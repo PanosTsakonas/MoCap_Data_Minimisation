@@ -144,7 +144,8 @@ r1=[0.0013 0.0482 1 1 1];
 r2=[5.26E-04 0.0169 1 1 1];
 r3=[8.23E-05 0.002814 1 1];
 
-%Set the equilibrium angles in degrees determined from a static capture
+%Set the equilibrium angles in degrees determined from a static capture 
+%theq=[MCP_equil, PIP_equil, DIP_equil]
 if in==2
  theq=[].*pi/180;
 elseif in==3

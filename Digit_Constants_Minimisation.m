@@ -198,7 +198,7 @@ xlabel("Time (s)");
 ylabel("Angle (degrees)");
 title("Angular data and fit with R^2: "+rsq+" RMSE: "+rmse+" degrees");
 
-Write=input("Do you want the data for checking the Lagrangian equations?:Y/N ");
+Write=input("Do you want the data for checking the Lagrangian equations?:Y/N ",'s');
 
 if(Write==Y || Write==y)
    writematrix([ppval(EDC_MCP,tim),ppval(FDP_MCP,tim),ppval(FDS_MCP,tim),ppval(EDC_PIP,tim),ppval(FDP_PIP,tim),ppval(FDS_PIP,tim),ppval(EDC_DIP,tim),ppval(FDP_DIP,tim),tim,th1f,th2f,th3f,Y1(:,1),Y2(:,1),Y3(:,1)],"data_digit_"+in+"_par_"+Par+".csv");

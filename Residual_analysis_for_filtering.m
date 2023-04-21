@@ -50,7 +50,7 @@ Model=fitlm([ff:floor(fn)],z(ff:end));
 plot([0:fn],feval(Model,[0:fn]),'--');
 intercept=feval(Model,0);
 plot([0:floor(fn)+1],ones(1,length([0:floor(fn)+1])).*intercept,':','Color','black','LineWidth',1.5);
-legend("Residuals","Linear fit of the noise residual","RMS of noise "+intercept+" degrees");
+legend("Residuals","Linear fit of the noise residual with R^2: "+Model.Rsquared.Ordinary,,"RMS of noise "+intercept+" degrees");
 hold off;
 
 FF=z<=intercept;

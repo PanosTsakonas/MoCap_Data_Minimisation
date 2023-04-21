@@ -49,7 +49,7 @@ Model=fitlm([ff:floor(fn)],z(ff:end));
 
 plot([0:fn],feval(Model,[0:fn]),'--');
 intercept=feval(Model,0);
-plot([0:floor(fn)+1],ones(1,length([0:floor(fn)+1])).*intercept,'-.');
+plot([0:floor(fn)+1],ones(1,length([0:floor(fn)+1])).*intercept,':');
 legend("Residuals","Linear fit of the noise residual","RMS of noise "+intercept+" degrees");
 hold off;
 

@@ -1,4 +1,4 @@
-function wnm=Residual_analysis_for_filtering(th,fs)
+function wnm=Residual_analysis_for_filtering(th,fs,segment)
 
 %This code performs the residual analysis suggested in the Biomechanics and
 %motor control of human movement in section 3.4.4.3 from Winter. This
@@ -42,7 +42,7 @@ plot(Wn,z)
 ff=input("Select the frequency point where you want to calculate the linear model: ");
 xlabel("Cutoff frequency (Hz)");
 ylabel("Residuals (degrees)");
-title("Residuals versus cutoff frequency plot");
+title("Residuals versus cutoff frequency plot of "+segment+" joint");
 
 %Linear fit of the straight portion of the residuals
 Model=fitlm([ff:floor(fn)],z(ff:end));

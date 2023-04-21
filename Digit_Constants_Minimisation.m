@@ -44,15 +44,18 @@ rho=1.16*10^3;
 
 
 %Low pass filter the angular data.
-wn_mcp=Residual_analysis_for_filtering(th1,fs);
+wn_mcp=Residual_analysis_for_filtering(th1,fs,'MCP');
 [b,a]=butter(4,wn_mcp/fn,'low');
 th1f=filtfilt(b,a,th1).*pi/180;
-wn_pip=Residual_analysis_for_filtering(th2,fs);
+clear b a
+wn_pip=Residual_analysis_for_filtering(th2,fs,'PIP');
 [b,a]=butter(4,wn_pip/fn,'low');
 th2f=filtfilt(b,a,th2).*pi/180;
-wn_dip=Residual_analysis_for_filtering(th3,fs);
+clear b a
+wn_dip=Residual_analysis_for_filtering(th3,fs,'DIP');
 [b,a]=butter(4,wn_dip/fn,'low');
 th3f=filtfilt(b,a,th3).*pi/180;
+clear b a
 
 
 %Set the time matrix

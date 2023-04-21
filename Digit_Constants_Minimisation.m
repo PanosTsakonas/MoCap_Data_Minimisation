@@ -67,18 +67,18 @@ plot(tim,th1f,tim,th1.*pi/180,'x');
 title("MCP");
 xlabel("Time (s)");
 ylabel("Angle (rad)");
-legend("Filtered","Raw data",'location','southeast');
+legend("Filtered at "+wn_mcp+" Hz","Raw data",'location','southeast');
 subplot(3,1,2)
 plot(tim,th2f,tim,th2.*pi/180,'x');
 xlabel("Time (s)");
 ylabel("Angle (rad)");
-legend("Filtered","Raw data",'location','southeast');
+legend("Filtered at "+wn_pip+" Hz","Raw data",'location','southeast');
 title("PIP");
 subplot(3,1,3)
 plot(tim,th3f,tim,th3.*pi/180,'x');
 xlabel("Time (s)");
 ylabel("Angle (rad)");
-legend("Filtered","Raw data",'location','southeast');
+legend("Filtered at "+wn_dip+" Hz","Raw data",'location','southeast');
 title("DIP");
 syms t x
 

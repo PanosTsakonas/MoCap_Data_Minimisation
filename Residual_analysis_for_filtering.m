@@ -14,7 +14,7 @@ function wnm=Residual_analysis_for_filtering(th,fs,segment)
 %the amount of noise allowed through. If we decide that both should be equal, 
 %then we simply project a line horizontally from a to intersect the residual line at b. 
 %The frequency chosen is fc', and at this frequency the signal distortion is represented by
-%bc. 
+%bc. This method is good for displacement data only!
 
 
 clc;

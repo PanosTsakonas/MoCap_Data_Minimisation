@@ -62,7 +62,7 @@ $$0< K <=5$$
 
 
 The $\rho_1 ,\rho_2, \rho_3$ are scaling constants for the muscle moments. According to the "A Musculoskeletal Model of the Hand and Wrist Capable of Simulating
-Functional Tasks" these muscle moments are representative of the average adult male. Since the experimental procedure was open to everyone we wanted to scale this model based on the collected data.
+Functional Tasks" these muscle moments are representative of the average adult male. Since the experimental procedure was open to everyone we wanted to scale this model based on the collected data up to twice the maximum muscle moment.
 
 The $K, B$ constants are constrained to be always positive and less than twice the values found in "Real-Time simulation of three-dimensional shoulder girdle and arm dynamics" 
 since these constants represent the passive moment for the shoulder and arm.

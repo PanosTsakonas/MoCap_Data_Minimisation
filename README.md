@@ -14,4 +14,4 @@ muscle activation, since there is no motion before the experiment, is
 assumed to be equal to zero. Tact and Tdeact are taken from the same
 paper. Following the calculation of the activations the signals are then downsampled so that the EMG data have the same length as the angular data and the muscle moments are calculated using the formula found in "Muscle and Tendon: Propoerties, models, scaling, and application to biomechanics and motor control" by Zajac.
 
-$/tau=(/alpha F_active+F_passive)*r_m 
+$$ /tau=(/alpha F_active+F_passive)*r_m 

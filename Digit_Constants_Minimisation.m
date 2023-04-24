@@ -64,13 +64,26 @@ for i=2:length(th1)
     tim(i)=tim(i-1)+1/fs;
 end
 
+disp("Important reminder: When MCP angular data have a sharp edge close to zero this is interpreted as finger motion starting from an extended joint position. Convert the angles before zero to negative. OpenSim muscle data take into account this negative sign and corresponds to an extension of the joint");
+
 figure
 subplot(3,1,1)
+hold on;
 plot(tim,th1f,tim,th1.*pi/180,'x');
 title("MCP");
 xlabel("Time (s)");
 ylabel("Angle (rad)");
+sh=input("The data exhibit a sharp edge close to zero? Y/N: ",'s');
+if (sh=='Y' || sh=='y')
+    [th1m,indm]=min(th1f);
+    
+    th1f=[-th1f(1:indm-1); th1f(indm:end)];
+    plot(tim,th1f,'o');
+    legend("Filtered at "+wn_mcp+" Hz","Raw data","Filtered data with OpenSim convention",'location','southeast');
+else
 legend("Filtered at "+wn_mcp+" Hz","Raw data",'location','southeast');
+end
+hold off;
 subplot(3,1,2)
 plot(tim,th2f,tim,th2.*pi/180,'x');
 xlabel("Time (s)");

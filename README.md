@@ -89,7 +89,7 @@ Initially you will be asked to determine the linear part of the cut-off frequenc
 
 Next the participant number and finger will be asked. Fingers are labelled as numbers and correspond to 2 (index), 3 (middle), 4 (ring), 5 (little). These numbers will be used to obtain the moments of inertia of the respective finger segments from the Moments of Inertia excel file. Furthermore, the respective muscle forces and moment arm functions are going to be used for the specific finger motion. One finger motion (i.e. Index MCP, Index PIP and Index DIP) data are used at a time. 
 
-Then the peak number for determining the envelope of the filtered and rectified EMG data for each muscle is going to be asked. This is a number and the smaller it gets the closer the peaks are going to be chosen. This is a visual representation of the actual envelope. Choose the peak that encloses the EMG signals the best.
+Then the peak number for determining the envelope of the filtered and rectified EMG data for each muscle is going to be asked. This is a number typically taken between 5-12. This is a visual representation of the actual envelope. Choose the peak that encloses the EMG signals the best.
 
 You will then be asked to press 1 to continue. A set of plots will be shown that will give you information about the muscle moments, activations with different methods and the envelopes of the EMG signals.
 

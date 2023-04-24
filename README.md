@@ -67,3 +67,36 @@ Functional Tasks" these muscle moments are representative of the average adult m
 The $K, B$ constants are constrained to be always positive and less than twice the values found in "Real-Time simulation of three-dimensional shoulder girdle and arm dynamics" 
 since these constants represent the passive moment parameters for the shoulder and arm joints.
 
+# User defined parameters
+
+In this code you will be prompted to input different numbers based on the plots provided.
+
+Set the sampling frequency of the MoCap at fs.
+
+Set the sampling frequency of the EMG at the EMG_2_Fit function at fEMG.
+
+Set the aEDCMax, aFDPMax, and aFDSMax from a MVC trial after using the MVC_Analysis script to determine these values.
+
+Set the aEDC, aFDP and aFDS matrices from the raw EMG data during the cylindrical grasp.
+
+Set th1, th2 and th3 the raw angular data for the MCP, PIP and DIP joint movements of the finger you will be analysing.
+
+Set the theq vector that will hold the equilibrium angles of each joint determined from a static capture.
+
+When you run the main script:
+
+Initially you will be asked to determine the linear part of the cut-off frequency for each joint in order to fit a linear model so that the residual at 0 Hz can be determined. Based on the data set and as shown in section 3.4.4.3 in "Biomechanics and motor control of human movement" in Figure 3.20. The cut-off frequency is then determined automatically and used in the creation of a 4th order low pass Butterworth filter. You will be asked if your MCP joint data show a sharp edge at 0 degrees. If this is the case press Y or y. This sharp edge corresponds to the extension angles of the MCP joint and the OpenSim convention is that these angles are negative. Because the way angles are calculated in ProCalc from the developed model both flexion and extension angles are positive. However, a visual inspection on the C3D file in Vicon nexus can give you an idea on which part of the signal is the extension. In this case there were participants that extended their fingers well above 0 degrees, before they performed the cylindrical grasp which is a typical finger flexion movement. That's why the sharp edge at zero degrees is visible. If not press any other button. 
+
+Next the participant number and finger will be asked. Fingers are labelled as numbers and correspond to 2 (index), 3 (middle), 4 (ring), 5 (little). These numbers will be used to obtain the moments of inertia of the respective finger segments from the Moments of Inertia excel file. Furthermore, the respective muscle forces and moment arm functions are going to be used for the specific finger motion. One finger motion (i.e. Index MCP, Index PIP and Index DIP) data are used at a time. 
+
+Then the peak number for determining the envelope of the filtered and rectified EMG data for each muscle is going to be asked. This is a number and the smaller it gets the closer the peaks are going to be chosen. This is a visual representation of the actual envelope. Choose the peak that encloses the EMG signals the best.
+
+You will then be asked to press 1 to continue. A set of plots will be shown that will give you information about the muscle moments, activations with different methods and the envelopes of the EMG signals.
+
+Lastly, a prompt will be given in order to save the muscle moment data, time, filtered angles, and IBK solution with optimised values in order to be used with the Mathematica code to visualise the response of the Lagrangian model and compare the results with the filtered data and IBK solution.
+
+
+
+
+
+

@@ -11,18 +11,52 @@ Functional Tasks" paper from their Sign Language model. The muscles that are use
 combined EMG and kinematic signals for prosthesis control: A simulation study 
 using a virtual reality environment". Then the filtered EMG data are rectified, normalised and the envelope is obtained using MATLAB's envelope function. Once the envelope is obtained a cubic spline interpolation is used to fit the latter in order to obtain the muscle level activation ($\alpha$) using the formula in "Real-time simulation of hand motion for prosthesis control". The initial condition for the 
 muscle activation, since there is no motion before the experiment, is
-assumed to be equal to zero. Tact and Tdeact are taken from the same
-paper. Following the calculation of the activations the signals are then downsampled so that the EMG data have the same length as the angular data and the muscle moments are calculated using the formula found in "Muscle and Tendon: Propoerties, models, scaling, and application to biomechanics and motor control" by Zajac, where the muscle moment ($\tau_m$) is equal to the product of the muscle level activation and the active muscle force plus the passive force and all that multiplied by the muscle moment arm ($r_m$). All the functions are in general functions of time.
+assumed to be equal to zero. $T_{act}$ and $T_{deact}$ are taken from the same
+paper. Following this calculation, the activations are then downsampled so that the activations have the same length as the angular data and the muscle moments are calculated using the formula found in "Muscle and Tendon: Propoerties, models, scaling, and application to biomechanics and motor control" by Zajac, where the muscle moment ($\tau_m$) is equal to the product of the muscle level activation and the active muscle force plus the passive force and all that multiplied by the muscle moment arm ($r_m$). All the functions are in general functions of time.
 
 $$ \tau_m=(\alpha_m*F_{active,m}+F_{passive,m})*r_m $$
 
 
-Once the muscle moments are calculated for each joint then a cubic spline interpolation is to generate the piecewise polynomial expression of the muscle moments. Then these functions are used as the actuators in the IBK system. The optimisation procedure is as follows: Let $p=[B,K,\rho_1,\rho_2,\rho_3]$ be the coefficients that we need to determine. The 2nd ODE is
+Once the muscle moments are calculated for each joint then a cubic spline interpolation is to generate the piecewise polynomial expression of the muscle moments. Then these functions are used as the actuators in the IBK system. The optimisation procedure is as follows: Let $p=[B,K,\rho_1,\rho_2,\rho_3]$ be the parameter vector that we need to determine. The 2nd ODE is:
 
 $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta(t) +B_i \dot \theta(t)+ K_i (\theta(t)-\theta_{eq})$$
 
 The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solution to the IBK model for each joint for each finger
 
-Minimise $\sum (\theta_f-\theta)^2 $ 
+Minimise $\sum (\theta_f-\theta)^2 $ using the following constraints:
 
+For the MCP joint
+
+$$
+\begin{align}
+0.1<=\rho_1<=2
+0.1<=\rho_2<=2
+0.1<=\rho_3<=2
+0<B<=2
+0<K<=10
+\end{align}
+$$
+
+For the PIP joint
+
+$$
+\begin{align}
+0.1<=\rho_1<=1.8
+0.1<=\rho_2<=1.8
+0.1<=\rho_3<=1.8
+0<B<=2
+0<K<=10
+\end{align}
+$$
+
+For the DIP joint
+
+$$
+\begin{align}
+0.1<=\rho_1<=1.8
+0.1<=\rho_2<=1.8
+0<B<=2
+0<K<=5
+\end{align}
+$$
 

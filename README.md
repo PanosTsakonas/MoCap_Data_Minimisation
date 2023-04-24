@@ -28,35 +28,29 @@ Minimise $\sum (\theta_f-\theta)^2 $ using the following constraints:
 For the MCP joint
 
 $$
-\begin{align}
 0.1<=\rho_1<=2
 0.1<=\rho_2<=2
 0.1<=\rho_3<=2
 0<B<=2
 0<K<=10
-\end{align}
 $$
 
 For the PIP joint
 
 $$
-\begin{align}
 0.1<=\rho_1<=1.8
 0.1<=\rho_2<=1.8
 0.1<=\rho_3<=1.8
 0<B<=2
 0<K<=10
-\end{align}
 $$
 
 For the DIP joint
 
 $$
-\begin{align}
 0.1<=\rho_1<=1.8
 0.1<=\rho_2<=1.8
 0<B<=2
 0<K<=5
-\end{align}
 $$
 

@@ -21,6 +21,6 @@ Once the muscle moments are calculated for each joint then a cubic spline interp
 
 $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta(t) +B_i \dot \theta(t)+ K_i (\theta(t)-\theta_{eq})$$
 
-Minimise $$ \sum (th_f-th)^2$$ 
+Minimise $\sum (th_f-th)^2 $ 
 
 

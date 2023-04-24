@@ -12,6 +12,6 @@ combined EMG and kinematic signals for prosthesis control: A simulation study
 using a virtual reality environment". Then the filtered EMG data are rectified, normalised and the envelope is obtained using MATLAB's envelope function. Once the envelope is obtained a spline interpolation is used to fit the latter in order to obtain the muscle level activation using the formula in "Real-time simulation of hand motion for prosthesis control". The initial condition for the 
 muscle activation, since there is no motion before the experiment, is
 assumed to be equal to zero. Tact and Tdeact are taken from the same
-paper. Following the calculation of the activations the signals are then downsampled so that the EMG data have the same length as the angular data and the muscle moments are calculated using the formula found in "Muscle and Tendon: Propoerties, models, scaling, and application to biomechanics and motor control" by Zajac.
+paper. Following the calculation of the activations the signals are then downsampled so that the EMG data have the same length as the angular data and the muscle moments are calculated using the formula found in "Muscle and Tendon: Propoerties, models, scaling, and application to biomechanics and motor control" by Zajac, where the muscle moment is equal to the product of the muscle level activation and the active muscle force plus the passive force and all that multiplied by the muscle moment arm.
 
-$$/tau=( /alpha*F_active+F_passive)*r_m 
+$$ \tau=(\alpha*F_active+F_passive)*r_m

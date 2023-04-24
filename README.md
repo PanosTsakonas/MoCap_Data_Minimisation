@@ -23,7 +23,7 @@ $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta(t) +B_i
 
 The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solution to the IBK model for each joint for each finger
 
-Minimise $\sum (\theta_f-\theta)^2 $ using the following constraints:
+Minimise $\sum (\theta_f-\theta)^2$ using the following constraints:
 
 For the MCP joint
 

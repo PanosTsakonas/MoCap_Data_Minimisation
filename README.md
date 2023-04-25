@@ -93,7 +93,7 @@ Then the peak number for determining the envelope of the filtered and rectified 
 
 You will then be asked to press 1 to continue. A set of plots will be shown that will give you information about the muscle moments, activations with different methods and the envelopes of the EMG signals.
 
-Lastly, a prompt will be given in order to save the muscle moment data, time, filtered angles, and IBK solution with optimised values in order to be used with the Mathematica code to visualise the response of the Lagrangian model and compare the results with the filtered data and IBK solution.
+Lastly, a prompt will be given in order to save the muscle moment data, time, filtered angles, and IBK solutions with optimised values in order to be used with the Mathematica code to visualise the response of the Lagrangian model and compare the results.
 
 
 

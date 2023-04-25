@@ -77,11 +77,11 @@ $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +
 
 Taking the Laplace Transform of the above and solving for \theta yields.
 
-$$\theta (s) = \rho_1/I_i *\tau_{EDC} (s)+\rho_2/I_i*\tau_{FDP} (s)+\rho_3/I_i *\tau_{FDS}(s) -\theta (0)*(s+B_i/I_i)/(s^2+B_i s/I_i+K_i/I_i)+K_i*\theta_{eq,i}/(I_i*(s^2+B_i s/I_i+K_i/I_i)$$
+$$\theta (s) = \rho_1/I_i *\tau_{EDC} (s)+\rho_2/I_i*\tau_{FDP} (s)+\rho_3/I_i *\tau_{FDS} (s) -\theta (0)*(s+B_i/I_i)/(s^2+B_i s/I_i+K_i/I_i)+K_i*\theta_{i,eq}/(I_i*(s^2+B_i s/I_i+K_i/I_i)$$
 
 From the above the muscle moments are known functions and the parameters that are determined uniquely are:
 
-$\rho_1/I_i,\rho_2/I_i,\rho_3/I_i,\theta (0),\theta_{eq,i}, K_i/I_i, B_i/I_i$
+$\rho_1/I_i,\rho_2/I_i,\rho_3/I_i,\theta (0),\theta_{i,eq}, K_i/I_i, B_i/I_i$
 
 This model is unidentifiable and an a-priori knowledge of at least one parameter is needed to determine the rest. Because the moment of inertia $I_i$ is known from the cylindrical approximation of the segments, hence it is unique then the parameter vector $p$ is determined uniquely from the input-output relationship and our model is structurally identifiable. 
 

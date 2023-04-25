@@ -77,7 +77,7 @@ $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +
 
 Taking the Laplace Transform of the above and solving for $\theta_i (s)$ yields.
 
-$$\theta_i (s) = \rho_1 \tau_{EDC} (s)/ I_{i} +\rho_2 \tau_{FDP} (s)/ I_{i} + \rho_3 \tau_{FDS} (s)  / I_{i} -\theta (0)*(s+B_i/I_i)/(s^2+B_i s/I_i+K_i/I_i)+K_i*\theta_{i,eq}/(I_i*(s^2+B_i s/I_i+K_i/I_i)$$
+$$\theta_i (s) = \rho_1*\tau_{EDC} (s)/ I_{i} +\rho_2*\tau_{FDP} (s)/ I_{i} + \rho_3*\tau_{FDS} (s)  / I_{i} -\theta_i (0)*(s+B_i/I_i)/(s^2+B_i s/I_i+K_i/I_i)+K_i*\theta_{i,eq}/(I_i*(s^2+B_i s/I_i+K_i/I_i)$$
 
 From the above the muscle moments are known functions and the parameters that are determined uniquely are:
 

@@ -23,7 +23,7 @@ Once the muscle moments are calculated for each joint, a cubic spline interpolat
 
 $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
 
-Let $p=[K,B,\rho_1,\rho_2,\rho_3]$ be the parameter vector. The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solutions to the IBK model for each joint for each finger. For the DIP joint only the EDC and FDP muscles are used.
+Let $p=[K_i ,B_i ,\rho_1,\rho_2,\rho_3]$ be the parameter vector. The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solutions to the IBK model for each joint for each finger. For the DIP joint only the EDC and FDP muscles are used.
 
 Minimise $\sum (\theta_{f,i}-\theta_i)^2$ using the following constraints:
 
@@ -71,7 +71,7 @@ since these constants represent the passive moment parameters for the shoulder a
 
 # Structural Identifiability
 
-Let $p=[K,B,\rho_1,\rho_2,\rho_3]$ be the parameter vector and the 2nd ODE solved is:
+Let $p=[K_i ,B_i ,\rho_1,\rho_2,\rho_3]$ be the parameter vector and the 2nd ODE solved is:
 
 $$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
 

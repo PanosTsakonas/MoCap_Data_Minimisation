@@ -183,11 +183,11 @@ i=1;
 
 %Middle segment IBK optimisation
 i=2;
-[Min2,sum2]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,th2f,i,I,theq(2),grav,in),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 1.8 1.8 1.8],[],options);
+[Min2,sum2]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,th2f,i,I,theq(2),grav,in),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
 
 %Distal segment IBK optimisation
 i=3;
-[Min3,sum3]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,th3f,i,I,theq(3),grav,in),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 1.8 1.8],[],options);
+[Min3,sum3]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,th3f,i,I,theq(3),grav,in),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 2 2],[],options);
 
 
 [~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim,[init(1) init(2)]);

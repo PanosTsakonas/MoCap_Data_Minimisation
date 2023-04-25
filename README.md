@@ -69,6 +69,22 @@ Functional Tasks" these muscle moments are representative of the average adult m
 The $K, B$ constants are constrained to be always positive and less than twice the values found in "Real-Time simulation of three-dimensional shoulder girdle and arm dynamics" 
 since these constants represent the passive moment parameters for the shoulder and arm joints.
 
+# Structural Identifiability
+
+Let $p=[K,B,\rho_1,\rho_2,\rho_3]$ be the parameter vector and the 2nd ODE solved is:
+
+$$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
+
+Taking the Laplace Transform of the above and solving for \theta yields.
+
+$$\theta (s) = \rho_1/I_i *\tau_{EDC} (s)+\rho_2/I_i*\tau_{FDP} (s)+\rho_3/I_i *\tau_{FDS}(s) -\theta (0)*(s+B_i/I_i)/(s^2+B_i s/I_i+K_i/I_i)+K_i*\theta_{eq,i}/(I_i*(s^2+B_i s/I_i+K_i/I_i)$$
+
+From the above the muscle moments are known functions and the parameters that are determined uniquely are:
+
+$\rho_1/I_i,\rho_2/I_i,\rho_3/I_i,\theta (0),\theta_{eq,i}, K_i/I_i, B_i/I_i$
+
+This model is unidentifiable and an a-priori knowledge of at least one parameter is needed to determine the rest. Because the moment of inertia $I_i$ is known from the cylindrical approximation of the segments, hence it is unique then the parameter vector $p$ is determined uniquely from the input-output relationship and our model is structurally identifiable. 
+
 # User defined parameters
 
 In this code you will be prompted to input different numbers based on the plots provided.
@@ -96,7 +112,6 @@ Then the peak number for determining the envelope of the filtered and rectified 
 You will then be asked to press 1 to continue. A set of plots will be shown that will give you information about the muscle moments, activations with different methods and the envelopes of the EMG signals.
 
 Lastly, a prompt will be given in order to save the muscle moment data, time, filtered angles, and IBK solutions with optimised values in order to be used with the Mathematica code to visualise the response of the Lagrangian model and compare the results.
-
 
 
 

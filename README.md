@@ -83,7 +83,7 @@ From the above the muscle moments are known functions and the parameters that ar
 
 $\rho_1/I_i,\rho_2/I_i,\rho_3/I_i,\theta_i (0),\theta_{i,eq}, K_i/I_i, B_i/I_i$
 
-This model is unidentifiable and an a-priori knowledge of at least one parameter is needed to determine the rest. Because the moment of inertia $I_i$ is known from the cylindrical approximation of the segments, hence it is unique then the parameter vector $p$ is determined uniquely from the input-output relationship and our model is structurally identifiable. 
+This model is unidentifiable and an a-priori knowledge of at least one parameter is needed to determine the rest. Because the moment of inertia $I_i$ is known from the cylindrical approximation of the segments, hence it is unique, then the parameter vector $p$ is determined uniquely from the input-output relationship and our model is structurally identifiable. 
 
 # User defined parameters
 

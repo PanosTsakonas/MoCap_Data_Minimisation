@@ -125,7 +125,7 @@ if in==1
    [tEMG,Res,eplf,fplf]=Thumb_EMG_2_Fit(th1f,th2f,th3f,aEPL,aFPL,aEPLMax,aFPLMax,fs); 
 else
 
-[SF_MCP,SF_PIP,SF_DIP,tEMG,Res,edcf,fdpf,fdsf]=EMG_2_Fit(th1f,th2f,th3f,aEDC,aFDP,aFDS,aEDCMax,aFDPMax,aFDSMax,tim,fs,in);
+[~,~,~,tEMG,Res,edcf,fdpf,fdsf]=EMG_2_Fit(th1f,th2f,th3f,aEDC,aFDP,aFDS,aEDCMax,aFDPMax,aFDSMax,tim,fs,in);
 end
 
 

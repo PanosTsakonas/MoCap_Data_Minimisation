@@ -440,10 +440,13 @@ title("Muscle activation of FDS Muscle");
 
     
     clear ac_edc ac_fdp ac_fds
-    
+%Use the activations from the ODE solver
+
 ac_edc=downsample(a_edc_ode,ceil(fsEMG/fs));
 ac_fdp=downsample(a_fdp_ode,ceil(fsEMG/fs));
 ac_fds=downsample(a_fds_ode,ceil(fsEMG/fs));
+
+
 figure
 plot(tim,ac_edc,tim,downsample(yedc1,ceil(fsEMG/fs)));
 xlabel("Time (s)");
@@ -489,6 +492,11 @@ SF_MCP=M_EDC_MCP+M_FDP_MCP+M_FDS_MCP;
 SF_PIP=M_EDC_PIP+M_FDP_PIP+M_FDS_PIP;
 SF_DIP=M_EDC_DIP+M_FDP_DIP;
 
+clear FA_EDC_MCP FA_EDC_PIP FA_EDC_DIP FA_FDS_MCP FA_FDS_PIP FA_FDP_MCP FA_FDP_PIP FA_FDP_DIP 
+
+clear PA_EDC_MCP PA_EDC_PIP PA_EDC_DIP PA_FDS_MCP PA_FDS_PIP PA_FDP_MCP PA_FDP_PIP PA_FDP_DIP
+
+clear rEDC_MCP rEDC_PIP rEDC_DIP rFDS_MCP rFDS_PIP rFDP_MCP rFDP_PIP rFDP_DIP
     
 end
 

@@ -165,6 +165,19 @@ r1=[0.0013 0.0482 1 1 1];
 r2=[5.26E-04 0.0169 1 1 1];
 r3=[8.23E-05 0.002814 1 1];
 
+% Define the number of bootstrap samples
+B1=5;
+
+% Define the number of parameters
+P=length(r1);
+P2=length(r3);
+
+% Initialize matrices to store parameter estimates and bootstrap datasets
+par_mcp=zeros(B1,P);
+par_pip=zeros(B1,P);
+par_dip=zeros(B1,P2);
+
+
 %Set the equilibrium angles in degrees determined from a static capture 
 %theq=[MCP_equil, PIP_equil, DIP_equil]
 if in==2
@@ -177,54 +190,125 @@ else
  theq=[].*pi/180;
 end
 
-%Proximal segment IBK optimisation
-i=1;
-[Min1,sum1]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim,init,th1f,i,I,theq(1),grav,in),r1,[],[],[],[],[r1(1) r1(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+Min1=[];
+Min2=[];
+Min3=[];
+Boot=0;
+
+if isempty(Min1)==1
+[Min1,sum1,~,out_mcp,lamda_mcp,~,hess_mcp]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim,init,th1f,i,I,theq(1),grav,in,Boot),r1,[],[],[],[],[r1(1) r1(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+end
+
+%Solve the IBK model for the minimised parameters
+[~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim,[init(1) init(2)]);
+low=[r1(1) r1(2) 0.1 0.1 0.1];
+up=[2 10 2 2 2];
+Boot=1;
+for i1=1:B1
+    disp("Bootstrap Method for MCP joint "+i1+"/"+B1);
+        residuals=th1f-Y1(:,1);  % Calculate residuals from initial parameter estimates
+        bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true); 
+        bootstrap_y=Y1(:,1) + bootstrap_residuals;
+        par_mcp(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim,init,bootstrap_y,i,I,theq(1),grav,in,Boot),Min1,[],[],[],[],low,up,[],options);
+        
+end
+% Calculate the parameter uncertainties as the standard deviation of parameter estimates
+sd_mcp = std(par_mcp);
+
+% Calculate the 95% bootstrap confidence intervals
+bootstrap_CIs = prctile(par_mcp, [2.5, 97.5]);
 
 %Middle segment IBK optimisation
 i=2;
-[Min2,sum2]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,th2f,i,I,theq(2),grav,in),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+Boot=0;
+if isempty(Min2)==1
+[Min2,sum2,~,out_pip,lamda_pip,~,hess_pip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,th2f,i,I,theq(2),grav,in,Boot),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+end
+
+clear low up residuals
+%Solve the IBK model for the minimised parameters
+[~,Y2]=ode45(@(t,y) IBK_th2(M2,M3,L2,EDC_PIP,FDP_PIP,FDS_PIP,g,Min2,I2,theq(2),grav,t,y),tim,[init(3) init(4)]);
+low=[r2(1) r2(2) 0.1 0.1 0.1];
+up=[2 10 2 2 2];
+Boot=1;
+for i1=1:B1
+    disp("Bootstrap Method for PIP joint "+i1+"/"+B1);
+        residuals=th2f-Y2(:,1);% Calculate residuals from initial parameter estimates
+        bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true);
+        bootstrap_y=Y2(:,1) + bootstrap_residuals;
+        par_pip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,bootstrap_y,i,I,theq(2),grav,in,Boot),Min2,[],[],[],[],low,up,[],options);
+        
+end
+% Calculate the parameter uncertainties as the standard deviation of parameter estimates
+sd_pip = std(par_pip);
+
+% Calculate the 95% bootstrap confidence intervals
+bootstrap_CIs_pip = prctile(par_pip, [2.5, 97.5]);
 
 %Distal segment IBK optimisation
 i=3;
-[Min3,sum3]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,th3f,i,I,theq(3),grav,in),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 2 2],[],options);
+Boot=0;
+
+if isempty(Min3)==1
+[Min3,sum3,~,out_dip,lamda_dip,~,hess_dip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,th3f,i,I,theq(3),grav,in,Boot),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 2 2],[],options);
+end
+
+clear low up residuals
+[~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim,[init(5) init(6)]);
+low=[r3(1) r3(2) 0.1 0.1];
+up=[2 5 2 2];
+Boot=1;
+for i1=1:B1
+    disp("Bootstrap Method for DIP joint "+i1+"/"+B1);
+        residuals=th3f-Y3(:,1);  % Calculate residuals from initial parameter estimates
+        bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true);
+        bootstrap_y=Y3(:,1) + bootstrap_residuals;
+        par_dip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,bootstrap_y,i,I,theq(3),grav,in,Boot),Min3,[],[],[],[],low,up,[],options);
+        
+end
+% Calculate the parameter uncertainties as the standard deviation of parameter estimates
+sd_dip = std(par_dip);
+
+% Calculate the 95% bootstrap confidence intervals
+bootstrap_CIs_dip = prctile(par_dip, [2.5, 97.5]);
 
 
-[~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim,[init(1) init(2)]);
+%Plot results
 figure
-plot(tim,Y1(:,1).*180/pi,tim,th1f.*180/pi);
-rmse=sqrt(mean((Y1(:,1).*180/pi-th1f.*180/pi).^2));
-rsq=1-sum((th1f-Y1(:,1)).^2)/sum((th1f-mean(th1f)).^2);
+plot(tim,Y1(:,1).*180/pi,tim,th1f.*180/pi,'x');
+rmse1=sqrt(mean((Y1(:,1).*180/pi-th1f.*180/pi).^2));
+rsq1=1-sum((th1f-Y1(:,1)).^2)/sum((th1f-mean(th1f)).^2);
 legend("Minimisation","Gait Lab MCP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");
-title("Angular data and fit with R^2: "+rsq+" RMSE: "+rmse+" degrees");
+title("Angular data and fit with R^2: "+rsq1+" RMSE: "+rmse1+" degrees");
 
-[~,Y2]=ode45(@(t,y) IBK_th2(M2,M3,L2,EDC_PIP,FDP_PIP,FDS_PIP,g,Min2,I2,theq(2),grav,t,y),tim,[init(3) init(4)]);
+
 figure
-plot(tim,Y2(:,1).*180/pi,tim,th2f.*180/pi);
-rmse=sqrt(mean((Y2(:,1).*180/pi-th2f.*180/pi).^2));
-rsq=1-sum((th2f-Y2(:,1)).^2)/sum((th2f-mean(th2f)).^2);
+plot(tim,Y2(:,1).*180/pi,tim,th2f.*180/pi,'x');
+rmse2=sqrt(mean((Y2(:,1).*180/pi-th2f.*180/pi).^2));
+rsq2=1-sum((th2f-Y2(:,1)).^2)/sum((th2f-mean(th2f)).^2);
 legend("Minimisation","Gait Lab PIP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");
-title("Angular data and fit with R^2: "+rsq+" RMSE: "+rmse+" degrees");
+title("Angular data and fit with R^2: "+rsq2+" RMSE: "+rmse2+" degrees");
 
-[~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim,[init(5) init(6)]);
+
 figure
-plot(tim,Y3(:,1).*180/pi,tim,th3f.*180/pi);
-rmse=sqrt(mean((Y3(:,1).*180/pi-th3f.*180/pi).^2));
-rsq=1-sum((th3f-Y3(:,1)).^2)/sum((th3f-mean(th3f)).^2);
+plot(tim,Y3(:,1).*180/pi,tim,th3f.*180/pi,'x');
+rmse3=sqrt(mean((Y3(:,1).*180/pi-th3f.*180/pi).^2));
+rsq3=1-sum((th3f-Y3(:,1)).^2)/sum((th3f-mean(th3f)).^2);
 legend("Minimisation","Gait Lab DIP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");
-title("Angular data and fit with R^2: "+rsq+" RMSE: "+rmse+" degrees");
+title("Angular data and fit with R^2: "+rsq3+" RMSE: "+rmse3+" degrees");
 
-Write=input("Do you want the data for checking the Lagrangian equations?:Y/N ",'s');
+rsq=[rsq1 rsq2 rsq3];
+rmse=[rmse1 rmse2 rmse3];
+save_resultsM(Min1,Min2,Min3,mn1,mn2,mn3,in,Par,sd_mcp,sd_pip,sd_dip,trial,rsq,rmse,cyl,wn_mcp,wn_pip,wn_dip);
+ffsave="P"+Par+"\data_digit_"+in+"par_"+Par+"_Cylindical_"+cyl+"trial_"+trial+".xlsx";
+writematrix([ppval(EDC_MCP,tim),ppval(FDP_MCP,tim),ppval(FDS_MCP,tim),ppval(EDC_PIP,tim),ppval(FDP_PIP,tim),ppval(FDS_PIP,tim),ppval(EDC_DIP,tim),ppval(FDP_DIP,tim),tim,th1f,th2f,th3f,Y1(:,1),Y2(:,1),Y3(:,1)],ffsave,'Sheet',in);
 
-if(Write=='Y' || Write=='y')
-   writematrix([ppval(EDC_MCP,tim),ppval(FDP_MCP,tim),ppval(FDS_MCP,tim),ppval(EDC_PIP,tim),ppval(FDP_PIP,tim),ppval(FDS_PIP,tim),ppval(EDC_DIP,tim),ppval(FDP_DIP,tim),tim,th1f,th2f,th3f,Y1(:,1),Y2(:,1),Y3(:,1)],"data_digit_"+in+"_par_"+Par+".csv");
-end
 
 
 else

@@ -98,6 +98,28 @@ legend("Filtered at "+wn_dip+" Hz","Raw data",'location','southeast');
 title("DIP");
 syms t x
 
+%To avoid fitting when no movement occurs in the begining set the index
+%point for each trial when the digit actually moves
+
+figure
+plot(th1f)
+title("MCP filtered data");
+xlabel("Index");
+ylabel("Angle (rad)");
+n_mcp=input("Give the index where the motion begins for the MCP joint: ");
+figure
+plot(th2f)
+title("PIP filtered data");
+xlabel("Index");
+ylabel("Angle (rad)");
+n_pip=input("Give the index where the motion begins for the PIP joint: ");
+figure
+plot(th3f)
+title("DIP filtered data");
+xlabel("Index");
+ylabel("Angle (rad)");
+n_dip=input("Give the index where the motion begins for the DIP joint: ");
+
 Par=input("Give the participant number: ");
 in=input("Give the digit you are working with: ");
 
@@ -195,21 +217,23 @@ Min2=[];
 Min3=[];
 Boot=0;
 
+Boot=0;
+
 if isempty(Min1)==1
-[Min1,sum1,~,out_mcp,lamda_mcp,~,hess_mcp]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim,init,th1f,i,I,theq(1),grav,in,Boot),r1,[],[],[],[],[r1(1) r1(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+[Min1,sum1,~,out_mcp,lamda_mcp,~,hess_mcp]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim(n_mcp:end),init,th1f(n_mcp:end),i,I,theq(1),grav,in,Boot),r1,[],[],[],[],[r1(1) r1(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
 end
 
 %Solve the IBK model for the minimised parameters
-[~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim,[init(1) init(2)]);
+[~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim(n_mcp:end),[init(1) init(2)]);
 low=[r1(1) r1(2) 0.1 0.1 0.1];
 up=[2 10 2 2 2];
 Boot=1;
+residuals=th1f(n_mcp:end)-Y1(:,1);  % Calculate residuals from initial parameter estimates
 for i1=1:B1
     disp("Bootstrap Method for MCP joint "+i1+"/"+B1);
-        residuals=th1f-Y1(:,1);  % Calculate residuals from initial parameter estimates
         bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true); 
         bootstrap_y=Y1(:,1) + bootstrap_residuals;
-        par_mcp(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim,init,bootstrap_y,i,I,theq(1),grav,in,Boot),Min1,[],[],[],[],low,up,[],options);
+        par_mcp(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim(n_mcp:end),init,bootstrap_y,i,I,theq(1),grav,in,Boot),Min1,[],[],[],[],low,up,[],options);
         
 end
 % Calculate the parameter uncertainties as the standard deviation of parameter estimates
@@ -222,21 +246,21 @@ bootstrap_CIs = prctile(par_mcp, [2.5, 97.5]);
 i=2;
 Boot=0;
 if isempty(Min2)==1
-[Min2,sum2,~,out_pip,lamda_pip,~,hess_pip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,th2f,i,I,theq(2),grav,in,Boot),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
+[Min2,sum2,~,out_pip,lamda_pip,~,hess_pip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim(n_pip:end),init,th2f(n_pip:end),i,I,theq(2),grav,in,Boot),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
 end
 
 clear low up residuals
 %Solve the IBK model for the minimised parameters
-[~,Y2]=ode45(@(t,y) IBK_th2(M2,M3,L2,EDC_PIP,FDP_PIP,FDS_PIP,g,Min2,I2,theq(2),grav,t,y),tim,[init(3) init(4)]);
+[~,Y2]=ode45(@(t,y) IBK_th2(M2,M3,L2,EDC_PIP,FDP_PIP,FDS_PIP,g,Min2,I2,theq(2),grav,t,y),tim(n_pip:end),[init(3) init(4)]);
 low=[r2(1) r2(2) 0.1 0.1 0.1];
 up=[2 10 2 2 2];
 Boot=1;
+residuals=th2f(n_pip:end)-Y2(:,1);% Calculate residuals from initial parameter estimates
 for i1=1:B1
     disp("Bootstrap Method for PIP joint "+i1+"/"+B1);
-        residuals=th2f-Y2(:,1);% Calculate residuals from initial parameter estimates
         bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true);
         bootstrap_y=Y2(:,1) + bootstrap_residuals;
-        par_pip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim,init,bootstrap_y,i,I,theq(2),grav,in,Boot),Min2,[],[],[],[],low,up,[],options);
+        par_pip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim(n_pip:end),init,bootstrap_y,i,I,theq(2),grav,in,Boot),Min2,[],[],[],[],low,up,[],options);
         
 end
 % Calculate the parameter uncertainties as the standard deviation of parameter estimates
@@ -250,20 +274,20 @@ i=3;
 Boot=0;
 
 if isempty(Min3)==1
-[Min3,sum3,~,out_dip,lamda_dip,~,hess_dip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,th3f,i,I,theq(3),grav,in,Boot),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 2 2],[],options);
+[Min3,sum3,~,out_dip,lamda_dip,~,hess_dip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim(n_dip:end),init,th3f(n_dip:end),i,I,theq(3),grav,in,Boot),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 5 2 2],[],options);
 end
 
 clear low up residuals
-[~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim,[init(5) init(6)]);
+[~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim(n_dip:end),[init(5) init(6)]);
 low=[r3(1) r3(2) 0.1 0.1];
 up=[2 5 2 2];
 Boot=1;
+residuals=th3f(n_dip:end)-Y3(:,1);  % Calculate residuals from initial parameter estimates
 for i1=1:B1
     disp("Bootstrap Method for DIP joint "+i1+"/"+B1);
-        residuals=th3f-Y3(:,1);  % Calculate residuals from initial parameter estimates
         bootstrap_residuals=datasample(residuals, length(residuals), 'Replace', true);
         bootstrap_y=Y3(:,1) + bootstrap_residuals;
-        par_dip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim,init,bootstrap_y,i,I,theq(3),grav,in,Boot),Min3,[],[],[],[],low,up,[],options);
+        par_dip(i1,:)=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim(n_dip:end),init,bootstrap_y,i,I,theq(3),grav,in,Boot),Min3,[],[],[],[],low,up,[],options);
         
 end
 % Calculate the parameter uncertainties as the standard deviation of parameter estimates
@@ -275,9 +299,9 @@ bootstrap_CIs_dip = prctile(par_dip, [2.5, 97.5]);
 
 %Plot results
 figure
-plot(tim,Y1(:,1).*180/pi,tim,th1f.*180/pi,'x');
-rmse1=sqrt(mean((Y1(:,1).*180/pi-th1f.*180/pi).^2));
-rsq1=1-sum((th1f-Y1(:,1)).^2)/sum((th1f-mean(th1f)).^2);
+plot(tim(n_mcp:end),Y1(:,1).*180/pi,tim(n_mcp:end),th1f(n_mcp:end).*180/pi,'x');
+rmse1=sqrt(mean((Y1(:,1).*180/pi-th1f(n_mcp:end).*180/pi).^2));
+rsq1=1-sum((th1f(n_mcp:end)-Y1(:,1)).^2)/sum((th1f(n_mcp:end)-mean(th1f(n_mcp:end))).^2);
 legend("Minimisation","Gait Lab MCP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");
@@ -285,9 +309,9 @@ title("Angular data and fit with R^2: "+rsq1+" RMSE: "+rmse1+" degrees");
 
 
 figure
-plot(tim,Y2(:,1).*180/pi,tim,th2f.*180/pi,'x');
-rmse2=sqrt(mean((Y2(:,1).*180/pi-th2f.*180/pi).^2));
-rsq2=1-sum((th2f-Y2(:,1)).^2)/sum((th2f-mean(th2f)).^2);
+plot(tim(n_pip:end),Y2(:,1).*180/pi,tim(n_pip:end),th2f(n_pip:end).*180/pi,'x');
+rmse2=sqrt(mean((Y2(:,1).*180/pi-th2f(n_pip:end).*180/pi).^2));
+rsq2=1-sum((th2f(n_pip:end)-Y2(:,1)).^2)/sum((th2f(n_pip:end)-mean(th2f(n_pip:end))).^2);
 legend("Minimisation","Gait Lab PIP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");
@@ -295,9 +319,9 @@ title("Angular data and fit with R^2: "+rsq2+" RMSE: "+rmse2+" degrees");
 
 
 figure
-plot(tim,Y3(:,1).*180/pi,tim,th3f.*180/pi,'x');
-rmse3=sqrt(mean((Y3(:,1).*180/pi-th3f.*180/pi).^2));
-rsq3=1-sum((th3f-Y3(:,1)).^2)/sum((th3f-mean(th3f)).^2);
+plot(tim(n_dip:end),Y3(:,1).*180/pi,tim(n_dip:end),th3f(n_dip:end).*180/pi,'x');
+rmse3=sqrt(mean((Y3(:,1).*180/pi-th3f(n_dip:end).*180/pi).^2));
+rsq3=1-sum((th3f(n_dip:end)-Y3(:,1)).^2)/sum((th3f(n_dip:end)-mean(th3f(n_dip:end))).^2);
 legend("Minimisation","Gait Lab DIP data",'Location','southeast');
 xlabel("Time (s)");
 ylabel("Angle (degrees)");

@@ -60,7 +60,7 @@ $$0.1<=\rho_2<=2$$
 
 $$0< B <=2$$
 
-$$0< K <=5$$
+$$0< K <=10$$
 
 
 The $\rho_1 ,\rho_2, \rho_3$ are scaling constants for the muscle moments. According to the "A Musculoskeletal Model of the Hand and Wrist Capable of Simulating

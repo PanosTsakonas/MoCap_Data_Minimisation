@@ -27,7 +27,7 @@ Let $p=[K_i ,B_i ,\rho_1,\rho_2,\rho_3]$ be the parameter vector. The parameter 
 
 Minimise $\sum (\theta_{f,i}-\theta_i)^2$ using the following constraints:
 
-For the MCP joint
+For the MCP and PIP joints
 
 
 $$0.1<=\rho_1<=2$$
@@ -40,17 +40,6 @@ $$ 0< B <=2 $$
 
 $$ 0< K <=10 $$
 
-For the PIP joint
-
-$$0.1<=\rho_1<=2$$
-
-$$0.1<=\rho_2<=2$$
-
-$$0.1<=\rho_3<=2$$
-
-$$0< B <=2$$
-
-$$0< K <=10$$
 
 For the DIP joint
 

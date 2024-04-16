@@ -280,7 +280,7 @@ end
 clear low up residuals
 [~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim(n_dip:end),[init(5) init(6)]);
 low=[r3(1) r3(2) 0.1 0.1];
-up=[2 5 2 2];
+up=[2 10 2 2];
 Boot=1;
 residuals=th3f(n_dip:end)-Y3(:,1);  % Calculate residuals from initial parameter estimates
 for i1=1:B1

@@ -25,6 +25,8 @@ Lag=[];
 
 %If the motion is in the direction of gravity change the following to 1
 grav=[];
+%gravitational acceleration m/s^2
+g=9.81;
 
 %mean Voltage of MVC for Normalisation could be either an empty matrix or a value
 aEDCMax=0.38847;
@@ -32,9 +34,6 @@ aFDPMax=0.28946;
 aFDSMax=0.18987;
 aEPLMax=[];
 aFPLMax=[];
-
-%gravitational acceleration m/s^2
-g=9.81;
 
 
 %Human body density in Kg*/m^3 according to Dempster W.T., “Space requirements of the seated operator: geometrical, kinematic, 

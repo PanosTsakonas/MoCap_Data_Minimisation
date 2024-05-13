@@ -1,4 +1,8 @@
 function Fv=Hatze(fl,a)
+%This function computes the normalised Force-Velocity interaction for each
+%muscle using the method in Thelen 2003 Adjustment of muscle mechanics
+%model parameters to simulate dynamic contractions in older adults.
+
 syms h
 fv=matlabFunction(0.1433/(0.1074+exp(-1.409*sinh(3.2*h+1.6)))); %Hatze function 
 Fm=max(fl);

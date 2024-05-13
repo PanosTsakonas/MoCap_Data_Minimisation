@@ -20,7 +20,7 @@ clc;
 %Select if you want to minimise the IBK or the Lagrangian. Set either to 1
 %if you want to minimise the respective equations
 IBK=1;
-
+Lag=[];
 
 %If the motion is in the direction of gravity change the following to 1
 grav=[];

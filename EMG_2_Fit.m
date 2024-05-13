@@ -1,4 +1,4 @@
-function [SF_MCP,SF_PIP,SF_DIP,tEMG,Res,aEDCf,aFDPf,aFDSf]=EMG_2_Fit(th1f,th2f,th3f,aEDC,aFDP,aFDS,aEDCMax,aFDPMax,aFDSMax,tim,fs,in)
+function [SF_MCP,SF_PIP,SF_DIP,tEMG,Res,aEDCf,aFDPf,aFDSf]=EMG_2_Fit(th1f,th2f,th3f,aEDC,aFDP,aFDS,aEDCMax,aFDPMax,aFDSMax,tim,fs,in,env)
 % This code is used to determine the muscle moments using the
 % T=(a*Fact+Fpass)*rm, where a is the muscle level activation, Fact and
 % Fpass are the active and passive muscle forces and rm is the muscle
@@ -212,7 +212,7 @@ end
 
 %The band pass filter
 
-[bemg,aemg]=butter(4,[15 450]./fnEMG,'bandpass');
+[bemg,aemg]=butter(4,[10 450]./fnEMG,'bandpass');
 aEDCf=filtfilt(bemg,aemg,aEDC);
 aFDPf=filtfilt(bemg,aemg,aFDP);
 aFDSf=filtfilt(bemg,aemg,aFDS);
@@ -245,9 +245,9 @@ end
 
 %obtain the envelope by low pass filtering the rectified data
 [bemg,aemg]=butter(4,10/fnEMG,'low');
-yedc1=filtfilt(bemg,aemg,aEDCf);
-yfdp1=filtfilt(bemg,aemg,aFDPf);
-yfds1=filtfilt(bemg,aemg,aFDSf);
+yedc10=filtfilt(bemg,aemg,aEDCf);
+yfdp10=filtfilt(bemg,aemg,aFDPf);
+yfds10=filtfilt(bemg,aemg,aFDSf);
 
 %The next two steps are taken from "A fast implementation for EMG signal 
 %linear envelope computation".
@@ -260,12 +260,12 @@ yfdsR=smooth(aFDSf,5);
 
 %Low pass at 30 Hz
 [bemg,aemg]=butter(4,30/fnEMG,'low');
-yedcr=filtfilt(bemg,aemg,yedcR);
-yfdpr=filtfilt(bemg,aemg,yfdpR);
-yfdsr=filtfilt(bemg,aemg,yfdsR);
+yedcr30=filtfilt(bemg,aemg,yedcR);
+yfdpr30=filtfilt(bemg,aemg,yfdpR);
+yfdsr30=filtfilt(bemg,aemg,yfdsR);
 %}
 
-
+if isempty(env)==1
 if (in==2)
 ll=1;
 mn1=12;
@@ -273,7 +273,13 @@ mn1=12;
 [yedc,~]=envelope(aEDCf,mn1,'peak');
 figure
 while(ll==1)
-plot(tEMG,aEDCf,tim,downsample(yedc,ceil(fsEMG/fs)));
+    if length(downsample(yedc,floor(fsEMG/fs)))==length(tim)+1
+        POP=downsample(yedc,floor(fsEMG/fs));
+        POP=POP(1:end-1);
+        plot(tEMG,aEDCf,tim,POP);
+    else 
+plot(tEMG,aEDCf,tim,downsample(yedc,floor(fsEMG/fs)));
+    end
 legend("EMG Raw Data","EMG envelope");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
@@ -291,7 +297,13 @@ mn2=12;
 figure
 ll=1;
 while(ll==1)
-plot(tEMG,aFDPf,tim,downsample(yfdp,ceil(fsEMG/fs)));
+    if length(downsample(yfdp,floor(fsEMG/fs)))==length(tim)+1
+        POP1=downsample(yfdp,floor(fsEMG/fs));
+        POP1=POP1(1:end-1);
+        plot(tEMG,aFDPf,tim,POP1);
+    else 
+plot(tEMG,aFDPf,tim,downsample(yfdp,floor(fsEMG/fs)));
+    end
 legend("EMG Raw Data","EMG envelope");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
@@ -309,8 +321,13 @@ mn3=12;
 figure
 ll=1;
 while(ll==1)
-    
-plot(tEMG,aFDSf,tim,downsample(yfds,ceil(fsEMG/fs)));
+    if length(downsample(yfds,floor(fsEMG/fs)))==length(tim)+1
+        POP2=downsample(yfds,floor(fsEMG/fs));
+        POP2=POP2(1:end-1);
+        plot(tEMG,aFDSf,tim,POP2);
+    else 
+plot(tEMG,aFDSf,tim,downsample(yfds,floor(fsEMG/fs)));
+    end
 legend("EMG Raw Data","EMG envelope");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
@@ -328,6 +345,11 @@ else
     [yedc,~]=envelope(aEDCf,mn1,'peak');
     [yfdp,~]=envelope(aFDPf,mn2,'peak');
     [yfds,~]=envelope(aFDSf,mn3,'peak');
+end
+else 
+    [yedc,~]=envelope(aEDCf,12,'peak');
+    [yfdp,~]=envelope(aFDPf,12,'peak');
+    [yfds,~]=envelope(aFDSf,12,'peak');
 end
 
 %Use the activation dynamics differential equation to obtain the
@@ -355,23 +377,24 @@ title("Raw EMG data and envelope for FDS muscle");
 [b3,a3]=butter(4,10/fnEMG,'low');
 [b4,a4]=butter(4,80/fnEMG,'low');
 figure
-plot(tEMG,filtfilt(b3,a3,aEDCf),tEMG,yedc,tEMG,filtfilt(b4,a4,aEDCf),tEMG,yedcr);
+plot(tEMG,filtfilt(b3,a3,aEDCf),tEMG,yedc,tEMG,filtfilt(b4,a4,aEDCf),tEMG,yedcr30);
 legend("EMG Linear envelope at 10 Hz","EMG envelope","EMG Linear envelope at 80 Hz","EMG envelope from A fast implementation for EMG signal linear envelope computation");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
 title("EMG envelopes for EDC muscle");
 figure
-plot(tEMG,filtfilt(b3,a3,aFDPf),tEMG,yfdp,tEMG,filtfilt(b4,a4,aFDPf),tEMG,yfdpr);
+plot(tEMG,filtfilt(b3,a3,aFDPf),tEMG,yfdp,tEMG,filtfilt(b4,a4,aFDPf),tEMG,yfdpr30);
 legend("EMG Linear envelope at 10 Hz","EMG envelope","EMG Linear envelope at 80 Hz","EMG envelope from A fast implementation for EMG signal linear envelope computation");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
 title("EMG envelopes for FDP muscle");
 figure
-plot(tEMG,filtfilt(b3,a3,aFDSf),tEMG,yfds,tEMG,filtfilt(b4,a4,aFDSf),tEMG,yfdsr);
+plot(tEMG,filtfilt(b3,a3,aFDSf),tEMG,yfds,tEMG,filtfilt(b4,a4,aFDSf),tEMG,yfdsr30);
 legend("EMG Linear envelope at 10 Hz","EMG envelope","EMG Linear envelope at 80 Hz","EMG envelope from A fast implementation for EMG signal linear envelope computation");
 xlabel("Time (s)");
 ylabel("Normalised EMG");
 title("EMG envelopes for FDS muscle");
+
 
 %Spline fit of MATLAB envelope data
 pedc=spline(tEMG,yedc);
@@ -394,35 +417,52 @@ Tdeact=50*10^-3;
 [~,a_fdp_ode]=ode45(@(t,a) activation(t,a,ppfdp),tEMG,0);
 [~,a_fds_ode]=ode45(@(t,a) activation(t,a,ppfds),tEMG,0);
 
-perms1=spline(tEMG,yedcr);
-psrms1=spline(tEMG,yfdsr);
-pprms1=spline(tEMG,yfdpr);
-
-peL1=spline(tEMG,yedc1);
-psL1=spline(tEMG,yfds1);
-ppL1=spline(tEMG,yfdp1);
+%Spline fit of the envelope filtered at 30 Hz
+perms1=spline(tEMG,yedcr30);
+psrms1=spline(tEMG,yfdsr30);
+pprms1=spline(tEMG,yfdpr30);
 
 perms=mkpp(perms1.breaks,perms1.coefs);
 psrms=mkpp(psrms1.breaks,psrms1.coefs);
 pprms=mkpp(pprms1.breaks,pprms1.coefs);
 
-peL=mkpp(peL1.breaks,peL1.coefs);
-psL=mkpp(psL1.breaks,psL1.coefs);
-ppL=mkpp(ppL1.breaks,ppL1.coefs);
-
+%Activation of the 30 Hz envelope data
 [~,aeR]=ode45(@(t,a) activation(t,a,perms),tEMG,0);
 [~,asR]=ode45(@(t,a) activation(t,a,psrms),tEMG,0);
 [~,apR]=ode45(@(t,a) activation(t,a,pprms),tEMG,0);
 
+
+%Spline fit of linear envelope data at 10 Hz
+peL1=spline(tEMG,yedc10);
+psL1=spline(tEMG,yfds10);
+ppL1=spline(tEMG,yfdp10);
+
+peL=mkpp(peL1.breaks,peL1.coefs);
+psL=mkpp(psL1.breaks,psL1.coefs);
+ppL=mkpp(ppL1.breaks,ppL1.coefs);
+
+%Activation from linear envelope data filtered at 10 Hz
 [~,aeL]=ode45(@(t,a) activation(t,a,peL),tEMG,0);
 [~,asL]=ode45(@(t,a) activation(t,a,psL),tEMG,0);
 [~,apL]=ode45(@(t,a) activation(t,a,ppL),tEMG,0);
 
 
 %Downsample the raw EMG data.
-yedc=downsample(aEDCf,ceil(fsEMG/fs));
-yfdp=downsample(aFDPf,ceil(fsEMG/fs));
-yfds=downsample(aFDSf,ceil(fsEMG/fs));
+yedc=downsample(aEDCf,floor(fsEMG/fs));
+yfdp=downsample(aFDPf,floor(fsEMG/fs));
+yfds=downsample(aFDSf,floor(fsEMG/fs));
+
+if length(yedc)==length(tim)+1
+    yedc=yedc(1:end-1);
+end
+
+if length(yfdp)==length(tim)+1
+    yfdp=yfdp(1:end-1);
+end
+
+if length(yfds)==length(tim)+1
+    yfds=yfds(1:end-1);
+end
 
 %Itterative method for the muscle level activation following the work of
 %"Real-time simulation of hand motion for prosthesis control". The initial
@@ -444,7 +484,7 @@ end
 %function and the low pass filtered rectified EMG can be related to the net
 %activation of the muscle a(t).
 figure
-plot(tim,ac_edc,tEMG,yedc1,tEMG,a_edc_ode,tEMG,aeR,tEMG,aeL);
+plot(tim,ac_edc,tEMG,yedc10,tEMG,a_edc_ode,tEMG,aeR,tEMG,aeL);
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering","activation ode","activation from RMS filtering","activation of linear envelope");
@@ -452,14 +492,14 @@ title("Muscle activation of EDC Muscle");
 
 
 figure
-plot(tim,ac_fdp,tEMG,yfdp1,tEMG,a_fdp_ode,tEMG,apR,tEMG,apL);
+plot(tim,ac_fdp,tEMG,yfdp10,tEMG,a_fdp_ode,tEMG,apR,tEMG,apL);
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering","activation ode","activation from RMS filtering","activation of linear envelope");
 title("Muscle activation of FDP Muscle");
 
 figure
-plot(tim,ac_fds,tEMG,yfds1,tEMG,a_fds_ode,tEMG,asR,tEMG,asL);
+plot(tim,ac_fds,tEMG,yfds10,tEMG,a_fds_ode,tEMG,asR,tEMG,asL);
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering","activation ode","activation from RMS filtering","activation of linear envelope");
@@ -468,14 +508,41 @@ title("Muscle activation of FDS Muscle");
     
     clear ac_edc ac_fdp ac_fds
  %Use the activations from the ODE   
-ac_edc=downsample(a_edc_ode,ceil(fsEMG/fs));
-ac_fdp=downsample(a_fdp_ode,ceil(fsEMG/fs));
-ac_fds=downsample(a_fds_ode,ceil(fsEMG/fs));
+ 
+if isempty(env)==1 
+    disp("You are using the activation from the MATLAB envelope data");
+    pause(3);
+    ac_edc=downsample(a_edc_ode,floor(fsEMG/fs));
+    ac_fdp=downsample(a_fdp_ode,floor(fsEMG/fs));
+    ac_fds=downsample(a_fds_ode,floor(fsEMG/fs));
+else
+    disp("You are using the activation from the Linear envelope data");
+    pause(3);
+    ac_edc=downsample(aeL,floor(fsEMG/fs));
+    ac_fdp=downsample(apL,floor(fsEMG/fs));
+    ac_fds=downsample(asL,floor(fsEMG/fs));
+end
 
+if length(ac_edc)==length(tim)+1
+    ac_edc=ac_edc(1:end-1);
+end
 
+if length(ac_fdp)==length(tim)+1
+    ac_fdp=ac_fdp(1:end-1);
+end
+
+if length(ac_fds)==length(tim)+1
+    ac_fds=ac_fds(1:end-1);
+end
 
 figure
-plot(tim,ac_edc,tim,downsample(yedc1,ceil(fsEMG/fs)));
+if length(downsample(yedc10,floor(fsEMG/fs)))==length(tim)+1
+    pop=downsample(yedc10,floor(fsEMG/fs));
+    pop=pop(1:end-1);
+    plot(tim,ac_edc,tim,pop);
+else
+plot(tim,ac_edc,tim,downsample(yedc10,floor(fsEMG/fs)));
+end
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering");
@@ -483,14 +550,26 @@ title("Muscle activation of EDC Muscle");
 
 
 figure
-plot(tim,ac_fdp,tim,downsample(yfdp1,ceil(fsEMG/fs)));
+if length(downsample(yfdp10,floor(fsEMG/fs)))==length(tim)+1
+    pop1=downsample(yfdp10,floor(fsEMG/fs));
+    pop1=pop1(1:end-1);
+    plot(tim,ac_fdp,tim,pop1);
+else
+plot(tim,ac_fdp,tim,downsample(yfdp10,floor(fsEMG/fs)));
+end
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering");
 title("Muscle activation of FDP Muscle");
 
 figure
-plot(tim,ac_fds,tim,downsample(yfds1,ceil(fsEMG/fs)));
+if length(downsample(yfds10,floor(fsEMG/fs)))==length(tim)+1
+    pop2=downsample(yfds10,floor(fsEMG/fs));
+    pop2=pop2(1:end-1);
+    plot(tim,ac_fds,tim,pop2);
+else
+plot(tim,ac_fds,tim,downsample(yfds10,floor(fsEMG/fs)));
+end
 xlabel("Time (s)");
 ylabel("Muscle activation");
 legend("activation formula","activation from filtering");

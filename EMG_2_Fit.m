@@ -576,16 +576,16 @@ legend("activation formula","activation from filtering");
 title("Muscle activation of FDS Muscle");
 
 %Normalised Force-Velocity curves method taken from Thelen 2003
-FV_EDC_MCP=Hatze(FA_EDC_MCP,ac_edc);
-FV_FDP_MCP=Hatze(FA_FDP_MCP,ac_fdp);
-FV_FDS_MCP=Hatze(FA_FDS_MCP,ac_fds);
+FV_EDC_MCP=Hatze(FA_EDC_MCP,ac_edc,'EDC_MCP',th1f,in);
+FV_FDP_MCP=Hatze(FA_FDP_MCP,ac_fdp,'FDP_MCP',th1f,in);
+FV_FDS_MCP=Hatze(FA_FDS_MCP,ac_fds,'FDS_MCP',th1f,in);
 
-FV_EDC_PIP=Hatze(FA_EDC_PIP,ac_edc);
-FV_FDP_PIP=Hatze(FA_FDP_PIP,ac_fdp);
-FV_FDS_PIP=Hatze(FA_FDS_PIP,ac_fds);
+FV_EDC_PIP=Hatze(FA_EDC_PIP,ac_edc,'EDC_PIP',th2f,in);
+FV_FDP_PIP=Hatze(FA_FDP_PIP,ac_fdp,'FDP_PIP',th2f,in);
+FV_FDS_PIP=Hatze(FA_FDS_PIP,ac_fds,'FDS_PIP',th2f,in);
 
-FV_EDC_DIP=Hatze(FA_EDC_DIP,ac_edc);
-FV_FDP_DIP=Hatze(FA_FDP_DIP,ac_fdp);
+FV_EDC_DIP=Hatze(FA_EDC_DIP,ac_edc,'EDC_DIP',th3f,in);
+FV_FDP_DIP=Hatze(FA_FDP_DIP,ac_fdp,'FDP_PIP',th3f,in);
 
 
 %From Zajac the muscle force production is a*Fact+Fpass=Fm and the muscle

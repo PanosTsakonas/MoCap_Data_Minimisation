@@ -1,4 +1,4 @@
-function Fv=Hatze(fl,a)
+function Fv=Hatze(Fa,a,F,th,in)
 %This function computes the normalised Force-Velocity interaction for each
 %muscle using the method in Thelen 2003 Adjustment of muscle mechanics
 %model parameters to simulate dynamic contractions in older adults.

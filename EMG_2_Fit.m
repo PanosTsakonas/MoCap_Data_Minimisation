@@ -585,7 +585,7 @@ FV_FDP_PIP=Hatze(FA_FDP_PIP,ac_fdp,'FDP_PIP',th2f,in);
 FV_FDS_PIP=Hatze(FA_FDS_PIP,ac_fds,'FDS_PIP',th2f,in);
 
 FV_EDC_DIP=Hatze(FA_EDC_DIP,ac_edc,'EDC_DIP',th3f,in);
-FV_FDP_DIP=Hatze(FA_FDP_DIP,ac_fdp,'FDP_PIP',th3f,in);
+FV_FDP_DIP=Hatze(FA_FDP_DIP,ac_fdp,'FDP_DIP',th3f,in);
 
 
 %From Zajac the muscle force production is a*Fact+Fpass=Fm and the muscle

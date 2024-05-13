@@ -496,22 +496,32 @@ ylabel("Muscle activation");
 legend("activation formula","activation from filtering");
 title("Muscle activation of FDS Muscle");
 
+%Normalised Force-Velocity curves method taken from Thelen 2003
+FV_EDC_MCP=Hatze(FA_EDC_MCP,ac_edc);
+FV_FDP_MCP=Hatze(FA_FDP_MCP,ac_fdp);
+FV_FDS_MCP=Hatze(FA_FDS_MCP,ac_fds);
 
+FV_EDC_PIP=Hatze(FA_EDC_PIP,ac_edc);
+FV_FDP_PIP=Hatze(FA_FDP_PIP,ac_fdp);
+FV_FDS_PIP=Hatze(FA_FDS_PIP,ac_fds);
+
+FV_EDC_DIP=Hatze(FA_EDC_DIP,ac_edc);
+FV_FDP_DIP=Hatze(FA_FDP_DIP,ac_fdp);
 
 
 %From Zajac the muscle force production is a*Fact+Fpass=Fm and the muscle
 %moment is M=Fm*r
 
-M_EDC_MCP=rEDC_MCP.*(ac_edc.*FA_EDC_MCP+PA_EDC_MCP);
-M_FDP_MCP=rFDP_MCP.*(ac_fdp.*FA_FDP_MCP+PA_FDP_MCP);
-M_FDS_MCP=rFDS_MCP.*(ac_fds.*FA_FDS_MCP+PA_FDS_MCP);
+M_EDC_MCP=rEDC_MCP.*(ac_edc.*FV_EDC_MCP.*FA_EDC_MCP+PA_EDC_MCP);
+M_FDP_MCP=rFDP_MCP.*(ac_fdp.*FV_FDP_MCP.*FA_FDP_MCP+PA_FDP_MCP);
+M_FDS_MCP=rFDS_MCP.*(ac_fds.*FV_FDS_MCP.*FA_FDS_MCP+PA_FDS_MCP);
 
-M_EDC_PIP=rEDC_PIP.*(ac_edc.*FA_EDC_PIP+PA_EDC_PIP);
-M_FDP_PIP=rFDP_PIP.*(ac_fdp.*FA_FDP_PIP+PA_FDP_PIP);
-M_FDS_PIP=rFDS_PIP.*(ac_fds.*FA_FDS_PIP+PA_FDS_PIP);
+M_EDC_PIP=rEDC_PIP.*(ac_edc.*FV_EDC_PIP.*FA_EDC_PIP+PA_EDC_PIP);
+M_FDP_PIP=rFDP_PIP.*(ac_fdp.*FV_FDP_PIP.*FA_FDP_PIP+PA_FDP_PIP);
+M_FDS_PIP=rFDS_PIP.*(ac_fds.*FV_FDS_PIP.*FA_FDS_PIP+PA_FDS_PIP);
 
-M_EDC_DIP=rEDC_DIP.*(ac_edc.*FA_EDC_DIP+PA_EDC_DIP);
-M_FDP_DIP=rFDP_DIP.*(ac_fdp.*FA_FDP_DIP+PA_FDP_DIP);
+M_EDC_DIP=rEDC_DIP.*(ac_edc.*FV_EDC_DIP.*FA_EDC_DIP+PA_EDC_DIP);
+M_FDP_DIP=rFDP_DIP.*(ac_fdp.*FV_FDP_DIP.*FA_FDP_DIP+PA_FDP_DIP);
 Res=[M_EDC_MCP M_FDP_MCP M_FDS_MCP M_EDC_PIP M_FDP_PIP M_FDS_PIP M_EDC_DIP M_FDP_DIP];
 
 %The sum of all the moments. The extensor moments are already negative!

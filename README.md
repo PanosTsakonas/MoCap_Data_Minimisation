@@ -21,20 +21,16 @@ $$ \tau_m=(\alpha_m*F_{active,m}+F_{passive,m})*r_m $$
 
 Once the muscle moments are calculated for each joint, a cubic spline interpolation is used to generate the piecewise polynomial expression of the muscle moments. These functions are used as the actuators in the IBK system. The 2nd ODE is:
 
-$$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
+$$c_1*\tau_{EDC}+c_2*\tau_{FDP}+c_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
 
-Let $p=[K_i ,B_i ,\rho_1,\rho_2,\rho_3]$ be the parameter vector. The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solutions to the IBK model for each joint for each finger. For the DIP joint only the EDC and FDP muscles are used.
-
-Minimise $\sum (\theta_{f,i}-\theta_i)^2$ using the following constraints:
-
-For the MCP and PIP joints
+Let $p=[K_i ,B_i ,c_1,c_2,c_3]$ be the parameter vector. The parameter vector $p$ is determined by minimising the square differences between the filtered data and the solutions to the IBK model for each joint for each finger. For the DIP joint only the EDC and FDP muscles are used.
 
 
-$$0.1<=\rho_1<=2$$
+$$0.1<=c_1<=2$$
 
-$$0.1<=\rho_2<=2$$
+$$0.1<=c_2<=2$$
 
-$$0.1<=\rho_3<=2$$
+$$0.1<=c_3<=2$$
 
 $$ 0< B <=2 $$
 
@@ -43,16 +39,16 @@ $$ 0< K <=10 $$
 
 For the DIP joint
 
-$$0.1<=\rho_1<=2$$
+$$0.1<=c_1<=2$$
 
-$$0.1<=\rho_2<=2$$
+$$0.1<=c_2<=2$$
 
 $$0< B <=2$$
 
 $$0< K <=10$$
 
 
-The $\rho_1 ,\rho_2, \rho_3$ are scaling constants for the muscle moments. According to the "A Musculoskeletal Model of the Hand and Wrist Capable of Simulating
+The $c_1 ,c_2, c_3$ are scaling constants for the muscle moments. According to the "A Musculoskeletal Model of the Hand and Wrist Capable of Simulating
 Functional Tasks" these muscle moments are representative of the average adult male. Since the experimental procedure was open to everyone we wanted to scale this model based on the collected data up to twice the maximum muscle moment.
 
 The $K, B$ constants are constrained to be always positive and less than twice the values found in "Real-Time simulation of three-dimensional shoulder girdle and arm dynamics" 
@@ -60,17 +56,17 @@ since these constants represent the passive moment parameters for the shoulder a
 
 # Structural Identifiability
 
-Let $p=[K_i ,B_i ,\rho_1,\rho_2,\rho_3]$ be the parameter vector and the 2nd ODE solved is:
+Let $p=[K_i ,B_i ,c_1,c_2,c_3]$ be the parameter vector and the 2nd ODE solved is:
 
-$$\rho_1*\tau_{EDC}+\rho_2*\tau_{FDP}+\rho_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
+$$c_1*\tau_{EDC}+c_2*\tau_{FDP}+c_3*\tau_{FDS}=I_i \ddot \theta_i (t) +B_i \dot \theta_i (t)+ K_i (\theta_i (t)-\theta_{i,eq})$$
 
 Taking the Laplace Transform of the above and solving for $\theta_i (s)$ yields.
 
-$$\theta_i (s) = [ \rho_1 / I_{i} * \tau_{EDC} (s) +\rho_2 / I_{i} * \tau_{FDP} (s) + \rho_3 / I_{i} * \tau_{FDS} (s)) + \theta_{i} (0) * (s+B_i/I_i) +K_i * \theta_{i,eq} / (I_i * s)] / (s^2+B_i s/I_i+K_i/I_i))$$
+$$\theta_i (s) = [ c_1 / I_{i} * \tau_{EDC} (s) +c_2 / I_{i} * \tau_{FDP} (s) + c_3 / I_{i} * \tau_{FDS} (s)) + \theta_{i} (0) * (s+B_i/I_i) +K_i * \theta_{i,eq} / (I_i * s)] / (s^2+B_i s/I_i+K_i/I_i))$$
 
 From the above the muscle moments are known functions and the parameters that are determined uniquely are:
 
-$\rho_1/I_i,\rho_2/I_i,\rho_3/I_i,\theta_i (0),\theta_{i,eq}, K_i/I_i, B_i/I_i$
+$c_1/I_i,c_2/I_i,c_3/I_i,\theta_i (0),\theta_{i,eq}, K_i/I_i, B_i/I_i$
 
 This model is unidentifiable and an a-priori knowledge of at least one parameter is needed to determine the rest. Because the moment of inertia $I_i$ is known from the cylindrical approximation of the segments, hence it is unique, then the parameter vector $p$ is determined uniquely from the input-output relationship and our model is structurally identifiable. 
 

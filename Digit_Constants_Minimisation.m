@@ -33,25 +33,13 @@ aEDCMax=0.30772;
 aFDPMax=0.2008;
 aFDSMax=0.15926;
 
-trial=input("Which Cylindrical trial number you are doing: ");
-if trial==0
-    trial=" ";
-end
-prom=input("is it a repeat trial? y/n: ",'s');
-
-if (prom=='Y' || prom=='y')
-    cyl="repeat";
-else
-    cyl=" ";
-end
-
 %gravitational acceleration m/s^2
 g=9.81;
 
 %Set the sampling frequency of the MoCap
 fs=125;
 fn=fs/2;
-
+trial=1;
 %Human body density in Kg/m^3
 rho=1.16*10^3;
 
@@ -338,19 +326,9 @@ rsq=[rsq1 rsq2 rsq3];
 rmse=[rmse1 rmse2 rmse3];
 save_resultsM(Min1,Min2,Min3,mn1,mn2,mn3,in,Par,sd_mcp,sd_pip,sd_dip,trial,rsq,rmse,cyl,wn_mcp(in-1),wn_pip(in-1),wn_dip(in-1),env);
 if (length(Y1(:,1))==length(th1) && length(Y2(:,1))==length(th2) && length(Y3(:,1))==length(th3))
-    if isempty(env)==1
-        if LL=='l'
-        ffsave="C:\Users\panos\OneDrive - University of Warwick\PhD\Hand Trials\Results\Cylindrical Grasp\P"+Par+"\data_digit_"+in+"par_"+Par+"_Cylindical_"+cyl+"_trial_"+trial+".xlsx";
-        else
-            ffsave="C:\Users\u1857308\OneDrive - University of Warwick\PhD\Hand Trials\Results\Cylindrical Grasp\P"+Par+"\data_digit_"+in+"par_"+Par+"_Cylindical_"+cyl+"_trial_"+trial+".xlsx";
-        end
-    else
-            if LL=='l'
-        
-             ffsave="C:\Users\panos\OneDrive - University of Warwick\PhD\Hand Trials\Results\Cylindrical Grasp\P"+Par+"\data_digit_"+in+"par_"+Par+"_Cylindical_"+cyl+"_trial_"+trial+"Linear_Envelope.xlsx";
-            else
-                ffsave="C:\Users\u1857308\OneDrive - University of Warwick\PhD\Hand Trials\Results\Cylindrical Grasp\P"+Par+"\data_digit_"+in+"par_"+Par+"_Cylindical_"+cyl+"_trial_"+trial+"Linear_Envelope.xlsx"; 
-            end
+   
+                ffsave="C:\Users\...................\data_digit_"+in+"par_"+Par+"_Cylindical_trial.xlsx"; 
+           
     end
         writematrix([ppval(EDC_MCP,tim(n_mcp(in-1):end)),ppval(FDP_MCP,tim(n_mcp(in-1):end)),ppval(FDS_MCP,tim(n_mcp(in-1):end)),ppval(EDC_PIP,tim(n_pip(in-1):end)),ppval(FDP_PIP,tim(n_pip(in-1):end)),ppval(FDS_PIP,tim(n_pip(in-1):end)),ppval(EDC_DIP,tim(n_dip(in-1):end)),ppval(FDP_DIP,tim(n_dip(in-1):end)),tim(n_mcp(in-1):end),th1f(n_mcp(in-1):end,in-1),tim(n_pip(in-1):end),th2f(n_pip(in-1):end,in-1),tim(n_dip(in-1):end),th3f(n_dip(in-1):end,in-1),Y1(:,1),Y2(:,1),Y3(:,1)],ffsave,'Sheet',in);
 end

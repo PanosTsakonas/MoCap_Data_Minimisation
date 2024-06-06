@@ -83,18 +83,7 @@ elseif in==5
     end
 end
 
-T=split(F,'_');
-%Parameters for width of muscle force-fibre length from 
-%"Maximum finger force prediction using a planar simulation of the middle finger" 
-if T{1}=='EDC'
-    W=0.181;
-    elseif T{1}=='FDP'
-    W=0.234;
-    elseif T{1}=='FDS'
-    W=0.178;
-    end
-
-fl1=matlabFunction(exp(-(h-1)^2/W)); %Active force-length scale factor from Thelen 2003.
+fl1=matlabFunction(exp(-(h-1)^2/0.45)); %Active force-length scale factor from Thelen 2003.
 fl=feval(fl1,Lm);
 
 fv=matlabFunction(0.1433/(0.1074+exp(-1.409*sinh(3.2*h+1.6)))); %Hatze function from A 3-D dynamic model 

@@ -217,6 +217,9 @@ Boot=0;
 if isempty(Min1)==1
 [Min1,sum1,~,out_mcp,lamda_mcp,~,hess_mcp]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r,tim(n_mcp(in-1):end),init,th1f(n_mcp(in-1):end,in-1),i,I,theq(1),grav,in,Boot),r1,[],[],[],[],[r1(1) r1(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
 end
+%Set Number of itterations
+Itter=10;
+Min1G=Search_For_Global(M1,M2,M3,L1,L2,L3,EDC_MCP,FDP_MCP,FDS_MCP,g,r1,tim(n_mcp(in-1):end),init,th1f(n_mcp(in-1):end,in-1),i,I,theq(1),grav,in,Boot,Itter);
 
 %Solve the IBK model for the minimised parameters
 [~,Y1]=ode45(@(t,y) IBK_th1(M1,M2,M3,L1,EDC_MCP,FDP_MCP,FDS_MCP,g,Min1,I1,theq(1),grav,t,y),tim(n_mcp(in-1):end),[init(1) init(2)]);
@@ -243,6 +246,10 @@ Boot=0;
 if isempty(Min2)==1
 [Min2,sum2,~,out_pip,lamda_pip,~,hess_pip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim(n_pip(in-1):end),init,th2f(n_pip(in-1):end,in-1),i,I,theq(2),grav,in,Boot),r2,[],[],[],[],[r2(1) r2(2) 0.1 0.1 0.1],[2 10 2 2 2],[],options);
 end
+
+
+Min2G=Search_For_Global(M1,M2,M3,L1,L2,L3,EDC_PIP,FDP_PIP,FDS_PIP,g,r,tim(n_pip(in-1):end),init,th2f(n_pip(in-1):end,in-1),i,I,theq(2),grav,in,Boot,Itter);
+
 
 clear low up residuals
 %Solve the IBK model for the minimised parameters
@@ -271,6 +278,8 @@ Boot=0;
 if isempty(Min3)==1
 [Min3,sum3,~,out_dip,lamda_dip,~,hess_dip]=fmincon(@(r) myobj(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim(n_dip(in-1):end),init,th3f(n_dip(in-1):end,in-1),i,I,theq(3),grav,in,Boot),r3,[],[],[],[],[r3(1) r3(2) 0.1 0.1],[2 10 2 2],[],options);
 end
+
+Min3G=Search_For_Global(M1,M2,M3,L1,L2,L3,EDC_DIP,FDP_DIP,[],g,r,tim(n_dip(in-1):end),init,th3f(n_dip(in-1):end,in-1),i,I,theq(3),grav,in,Boot,Itter);
 
 clear low up residuals
 [~,Y3]=ode45(@(t,y) IBK_th3(M3,L3,EDC_DIP,FDP_DIP,g,Min3,I3,theq(3),grav,t,y),tim(n_dip(in-1):end),[init(5) init(6)]);

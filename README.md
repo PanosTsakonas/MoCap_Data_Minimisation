@@ -1,3 +1,11 @@
+# Reference
+
+To reference this code please use the below:
+P. Tsakonas, N. D. Evans, J. Hardwicke and M. J. Chappell, "Estimating model parameters of a mathematical model for hand motion during cylindrical grasps," 2024 46th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC), Orlando, FL, USA, 2024, pp. 1-5, doi: 10.1109/EMBC53108.2024.10782474.
+
+
+
+
 # Parameter estimation from least square minimisation
 
 This code is used to determine the torsional spring and damper parameters of a torsional mass-spring-damper (IBK) system. The parameters are determined by minimising the square differences between the numerical solution of the IBK system and the filtered Motion capture data recorded during a cylindrical grasp. The moment of Inertia parameter is determined uniquely from a cylindrical approximation of the digits which has been verified in a paper that is currently under review. Since the moment of inertia parameter is known the spring and damper parameters can be determined uniquely from the data.

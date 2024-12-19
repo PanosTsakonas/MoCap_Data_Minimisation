@@ -1,6 +1,6 @@
 # Reference
 
-To reference this code please use the below:
+To reference this code please use the following:
 P. Tsakonas, N. D. Evans, J. Hardwicke and M. J. Chappell, "Estimating model parameters of a mathematical model for hand motion during cylindrical grasps," 2024 46th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC), Orlando, FL, USA, 2024, pp. 1-5, doi: 10.1109/EMBC53108.2024.10782474.
 
 
